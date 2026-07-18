@@ -46,6 +46,32 @@ void addStudent(Student students[], int *count) {
 }
 
 /* ------------------------------------------------------------
+   deleteStudent
+   Asks for an ID, finds that student, and removes them by
+   shifting every student after it one slot to the left.
+   The remaining students (and the file, once saved) are
+   unaffected — only the deleted one disappears.
+   ------------------------------------------------------------ */
+void deleteStudent(Student students[], int *count) {
+    int id;
+    printf("Enter Student ID to delete: ");
+    scanf("%d", &id);
+
+    for (int i = 0; i < *count; i++) {
+        if (students[i].id == id) {
+            /* shift everyone after this one left by one position */
+            for (int j = i; j < *count - 1; j++) {
+                students[j] = students[j + 1];
+            }
+            (*count)--;   /* one fewer student now */
+            printf("Student %d deleted.\n", id);
+            return;
+        }
+    }
+    printf("No student found with ID %d.\n", id);
+}
+
+/* ------------------------------------------------------------
    displayAllStudents
    Prints every student in a simple table.
    ------------------------------------------------------------ */
