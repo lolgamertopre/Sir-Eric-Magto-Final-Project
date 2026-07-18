@@ -27,7 +27,8 @@ int main(void) {
         printf("3. Search by Student ID\n");
         printf("4. Find by GPA Threshold\n");
         printf("5. Find by Major\n");
-        printf("6. Save & Exit\n");
+        printf("6. Delete Student\n");
+        printf("7. Save & Exit\n");
         printf("Enter choice: ");
         scanf("%d", &choice);
 
@@ -48,14 +49,17 @@ int main(void) {
                 findByMajor(students, count);
                 break;
             case 6:
+                deleteStudent(students, &count);
+                break;
+            case 7:
                 saveStudentsToFile(students, count);
                 printf("Goodbye!\n");
                 break;
             default:
-                printf("Invalid choice. Please enter 1-6.\n");
+                printf("Invalid choice. Please enter 1-7.\n");
         }
 
-    } while (choice != 6);
+    } while (choice != 7);
 
     return 0;
 }
