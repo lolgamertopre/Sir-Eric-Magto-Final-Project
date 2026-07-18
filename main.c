@@ -8,18 +8,7 @@
    ============================================================ */
 
 #include <stdio.h>
-#include <stdlib.h>
 #include "student_registry.h"
-
-/* Clears the terminal screen (Linux/Mac). Waits for the user
-   to press Enter first, so they get to actually read the
-   result of their last action before it disappears. */
-void pauseAndClear(void) {
-    printf("\nPress Enter to continue...");
-    while (getchar() != '\n') { }   /* eat leftover Enter from scanf */
-    getchar();                      /* wait for the real Enter press */
-    system("clear");
-}
 
 int main(void) {
     Student students[MAX_STUDENTS];
@@ -68,10 +57,6 @@ int main(void) {
                 break;
             default:
                 printf("Invalid choice. Please enter 1-7.\n");
-        }
-
-        if (choice != 7) {
-            pauseAndClear();
         }
 
     } while (choice != 7);
