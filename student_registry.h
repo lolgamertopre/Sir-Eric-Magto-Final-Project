@@ -29,6 +29,7 @@ typedef struct {
 
 /* ---- Core functions (same idea as Day 10) ------------------ */
 void addStudent(Student students[], int *count);
+void deleteStudent(Student students[], int *count);
 void displayAllStudents(const Student students[], int count);
 void searchByID(const Student students[], int count);
 void findByGPA(const Student students[], int count);
