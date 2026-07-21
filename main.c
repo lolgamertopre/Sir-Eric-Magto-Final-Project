@@ -8,7 +8,11 @@ void pauseAndClear(void) {
     printf("\nPress Enter to continue...");
     while (getchar() != '\n') { }   
     getchar();                      
+#ifdef _WIN32
+    system("cls");
+#else
     system("clear");
+#endif
 }
 
 int main(void) {
