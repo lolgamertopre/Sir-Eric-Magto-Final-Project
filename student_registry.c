@@ -1,8 +1,15 @@
-
 #include <stdio.h>
 #include <string.h>
 #include "student_registry.h"
 
+/* FIX: flushes anything left in stdin up to and including the
+   next newline (or EOF). Call this after any scanf() that reads
+   a number, so leftover bad characters never leak into the next
+   prompt and cause a chain reaction of failed reads. */
+void clearInputBuffer(void) {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) { }
+}
 
 void addStudent(Student students[], int *count) {
     if (*count >= MAX_STUDENTS) {
@@ -10,49 +17,63 @@ void addStudent(Student students[], int *count) {
         return;
     }
 
-    Student s;  
+    Student s;
 
     printf("Enter Student ID: ");
-    scanf("%d", &s.id);
+    /* FIX: loop until scanf successfully reads an int */
+    while (scanf("%d", &s.id) != 1) {
+        printf("Invalid input. Please enter a whole number: ");
+        clearInputBuffer();
+    }
+    clearInputBuffer(); /* FIX: eat the leftover newline after %d */
 
     printf("Enter Name: ");
-    scanf(" %99[^\n]", s.name);  
+    scanf(" %99[^\n]", s.name);
 
     printf("Enter Major: ");
     scanf(" %49[^\n]", s.major);
 
     printf("Enter GPA: ");
-    scanf("%f", &s.gpa);
+    while (scanf("%f", &s.gpa) != 1) {
+        printf("Invalid input. Please enter a number (e.g. 3.5): ");
+        clearInputBuffer();
+    }
+    clearInputBuffer();
 
     printf("Enter Credits: ");
-    scanf("%d", &s.credits);
+    while (scanf("%d", &s.credits) != 1) {
+        printf("Invalid input. Please enter a whole number: ");
+        clearInputBuffer();
+    }
+    clearInputBuffer();
 
-    students[*count] = s;   
-    (*count)++;             
+    students[*count] = s;
+    (*count)++;
 
     printf("Student added successfully!\n");
 }
 
-
 void deleteStudent(Student students[], int *count) {
     int id;
     printf("Enter Student ID to delete: ");
-    scanf("%d", &id);
+    while (scanf("%d", &id) != 1) {
+        printf("Invalid input. Please enter a whole number: ");
+        clearInputBuffer();
+    }
+    clearInputBuffer();
 
     for (int i = 0; i < *count; i++) {
         if (students[i].id == id) {
-            
             for (int j = i; j < *count - 1; j++) {
                 students[j] = students[j + 1];
             }
-            (*count)--;  
+            (*count)--;
             printf("Student %d deleted.\n", id);
             return;
         }
     }
     printf("No student found with ID %d.\n", id);
 }
-
 
 void displayAllStudents(const Student students[], int count) {
     if (count == 0) {
@@ -74,11 +95,14 @@ void displayAllStudents(const Student students[], int count) {
     }
 }
 
-
 void searchByID(const Student students[], int count) {
     int id;
     printf("Enter Student ID to search: ");
-    scanf("%d", &id);
+    while (scanf("%d", &id) != 1) {
+        printf("Invalid input. Please enter a whole number: ");
+        clearInputBuffer();
+    }
+    clearInputBuffer();
 
     for (int i = 0; i < count; i++) {
         if (students[i].id == id) {
@@ -91,13 +115,16 @@ void searchByID(const Student students[], int count) {
     printf("No student found with ID %d.\n", id);
 }
 
-
 void findByGPA(const Student students[], int count) {
     float threshold;
     int found = 0;
 
     printf("Enter minimum GPA: ");
-    scanf("%f", &threshold);
+    while (scanf("%f", &threshold) != 1) {
+        printf("Invalid input. Please enter a number (e.g. 3.0): ");
+        clearInputBuffer();
+    }
+    clearInputBuffer();
 
     for (int i = 0; i < count; i++) {
         if (students[i].gpa >= threshold) {
@@ -110,7 +137,6 @@ void findByGPA(const Student students[], int count) {
         printf("No students found with GPA >= %.2f\n", threshold);
     }
 }
-
 
 void findByMajor(const Student students[], int count) {
     char major[50];
@@ -131,13 +157,12 @@ void findByMajor(const Student students[], int count) {
     }
 }
 
-
 void saveStudentsToFile(const Student students[], int count) {
-    FILE *file = fopen(DATA_FILE, "w");   
+    FILE *file = fopen(DATA_FILE, "w");
 
     if (file == NULL) {
         printf("Error: Could not open %s for writing.\n", DATA_FILE);
-        return;  
+        return;
     }
 
     for (int i = 0; i < count; i++) {
@@ -149,17 +174,15 @@ void saveStudentsToFile(const Student students[], int count) {
                 students[i].credits);
     }
 
-    fclose(file);   
+    fclose(file);
     printf("Saved %d student(s) to %s\n", count, DATA_FILE);
 }
 
-
 int loadStudentsFromFile(Student students[]) {
-    FILE *file = fopen(DATA_FILE, "r");  
+    FILE *file = fopen(DATA_FILE, "r");
     int count = 0;
 
     if (file == NULL) {
-       
         printf("No existing data file found. Starting fresh.\n");
         return 0;
     }
@@ -168,11 +191,10 @@ int loadStudentsFromFile(Student students[]) {
     while (fgets(line, sizeof(line), file) != NULL && count < MAX_STUDENTS) {
         Student s;
 
-      
         int fields = sscanf(line, "%d|%99[^|]|%49[^|]|%f|%d",
                              &s.id, s.name, s.major, &s.gpa, &s.credits);
 
-        if (fields == 5) {   
+        if (fields == 5) {
             students[count] = s;
             count++;
         }
