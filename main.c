@@ -1,15 +1,13 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "student_registry.h"
 
-
 void pauseAndClear(void) {
     printf("\nPress Enter to continue...");
-    while (getchar() != '\n') { }   
-    getchar();                      
+    while (getchar() != '\n') { }
+    getchar();
 #ifdef _WIN32
-    system("cls");
+    system("cls");   /* FIX: use Windows clear-screen command */
 #else
     system("clear");
 #endif
@@ -34,7 +32,14 @@ int main(void) {
         printf("6. Delete Student\n");
         printf("7. Save & Exit\n");
         printf("Enter choice: ");
-        scanf("%d", &choice);
+
+        /* FIX: validate the menu choice, this was the main
+           source of "stacking" when non-numeric input was typed */
+        while (scanf("%d", &choice) != 1) {
+            printf("Invalid input. Please enter a number 1-7: ");
+            clearInputBuffer();
+        }
+        clearInputBuffer(); /* FIX: eat leftover newline after %d */
 
         switch (choice) {
             case 1:
