@@ -1,34 +1,22 @@
-/* ============================================================
-   student_registry.c
-   ------------------------------------------------------------
-   This is the IMPLEMENTATION file. It contains the real code
-   behind every function declared in student_registry.h.
-   main.c never needs to read this file to use these functions
-   — that's the "how" hidden behind the "what".
-   ============================================================ */
 
 #include <stdio.h>
 #include <string.h>
 #include "student_registry.h"
 
-/* ------------------------------------------------------------
-   addStudent
-   Asks the user for details and adds one new student to the
-   array, as long as there is still room.
-   ------------------------------------------------------------ */
+
 void addStudent(Student students[], int *count) {
     if (*count >= MAX_STUDENTS) {
         printf("Registry is full! Cannot add more students.\n");
         return;
     }
 
-    Student s;  /* build the new student here first */
+    Student s;  
 
     printf("Enter Student ID: ");
     scanf("%d", &s.id);
 
     printf("Enter Name: ");
-    scanf(" %99[^\n]", s.name);   /* reads a full line, up to 99 chars */
+    scanf(" %99[^\n]", s.name);  
 
     printf("Enter Major: ");
     scanf(" %49[^\n]", s.major);
@@ -39,19 +27,13 @@ void addStudent(Student students[], int *count) {
     printf("Enter Credits: ");
     scanf("%d", &s.credits);
 
-    students[*count] = s;   /* store it in the array */
-    (*count)++;             /* one more student now exists */
+    students[*count] = s;   
+    (*count)++;             
 
     printf("Student added successfully!\n");
 }
 
-/* ------------------------------------------------------------
-   deleteStudent
-   Asks for an ID, finds that student, and removes them by
-   shifting every student after it one slot to the left.
-   The remaining students (and the file, once saved) are
-   unaffected — only the deleted one disappears.
-   ------------------------------------------------------------ */
+
 void deleteStudent(Student students[], int *count) {
     int id;
     printf("Enter Student ID to delete: ");
@@ -59,11 +41,11 @@ void deleteStudent(Student students[], int *count) {
 
     for (int i = 0; i < *count; i++) {
         if (students[i].id == id) {
-            /* shift everyone after this one left by one position */
+            
             for (int j = i; j < *count - 1; j++) {
                 students[j] = students[j + 1];
             }
-            (*count)--;   /* one fewer student now */
+            (*count)--;  
             printf("Student %d deleted.\n", id);
             return;
         }
@@ -71,10 +53,7 @@ void deleteStudent(Student students[], int *count) {
     printf("No student found with ID %d.\n", id);
 }
 
-/* ------------------------------------------------------------
-   displayAllStudents
-   Prints every student in a simple table.
-   ------------------------------------------------------------ */
+
 void displayAllStudents(const Student students[], int count) {
     if (count == 0) {
         printf("No students to display.\n");
@@ -95,10 +74,7 @@ void displayAllStudents(const Student students[], int count) {
     }
 }
 
-/* ------------------------------------------------------------
-   searchByID
-   Asks for an ID and prints that student if found.
-   ------------------------------------------------------------ */
+
 void searchByID(const Student students[], int count) {
     int id;
     printf("Enter Student ID to search: ");
@@ -115,10 +91,7 @@ void searchByID(const Student students[], int count) {
     printf("No student found with ID %d.\n", id);
 }
 
-/* ------------------------------------------------------------
-   findByGPA
-   Asks for a minimum GPA and lists everyone at or above it.
-   ------------------------------------------------------------ */
+
 void findByGPA(const Student students[], int count) {
     float threshold;
     int found = 0;
@@ -138,10 +111,7 @@ void findByGPA(const Student students[], int count) {
     }
 }
 
-/* ------------------------------------------------------------
-   findByMajor
-   Asks for a major (case-insensitive) and lists matches.
-   ------------------------------------------------------------ */
+
 void findByMajor(const Student students[], int count) {
     char major[50];
     int found = 0;
@@ -161,18 +131,13 @@ void findByMajor(const Student students[], int count) {
     }
 }
 
-/* ------------------------------------------------------------
-   saveStudentsToFile
-   Writes every student to DATA_FILE, one line per student,
-   using '|' to separate fields (pipe-delimited text format).
-   Format:  ID|NAME|MAJOR|GPA|CREDITS
-   ------------------------------------------------------------ */
+
 void saveStudentsToFile(const Student students[], int count) {
-    FILE *file = fopen(DATA_FILE, "w");   /* "w" = write (overwrite) */
+    FILE *file = fopen(DATA_FILE, "w");   
 
     if (file == NULL) {
         printf("Error: Could not open %s for writing.\n", DATA_FILE);
-        return;   /* fail gracefully instead of crashing */
+        return;  
     }
 
     for (int i = 0; i < count; i++) {
@@ -184,22 +149,17 @@ void saveStudentsToFile(const Student students[], int count) {
                 students[i].credits);
     }
 
-    fclose(file);   /* MUST close, or data may not actually be saved */
+    fclose(file);   
     printf("Saved %d student(s) to %s\n", count, DATA_FILE);
 }
 
-/* ------------------------------------------------------------
-   loadStudentsFromFile
-   Reads DATA_FILE line by line and rebuilds the student array.
-   Returns the number of students loaded (0 if the file does
-   not exist yet — that's normal on first run).
-   ------------------------------------------------------------ */
+
 int loadStudentsFromFile(Student students[]) {
-    FILE *file = fopen(DATA_FILE, "r");   /* "r" = read */
+    FILE *file = fopen(DATA_FILE, "r");  
     int count = 0;
 
     if (file == NULL) {
-        /* Not an error — just means no data has been saved yet. */
+       
         printf("No existing data file found. Starting fresh.\n");
         return 0;
     }
@@ -208,12 +168,11 @@ int loadStudentsFromFile(Student students[]) {
     while (fgets(line, sizeof(line), file) != NULL && count < MAX_STUDENTS) {
         Student s;
 
-        /* sscanf parses the pipe-delimited line back into fields.
-           %d[^|] etc. means "read characters until you hit a '|'" */
+      
         int fields = sscanf(line, "%d|%99[^|]|%49[^|]|%f|%d",
                              &s.id, s.name, s.major, &s.gpa, &s.credits);
 
-        if (fields == 5) {   /* only keep the line if all 5 fields parsed */
+        if (fields == 5) {   
             students[count] = s;
             count++;
         }
