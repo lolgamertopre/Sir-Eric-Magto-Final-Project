@@ -78,3 +78,27 @@ makes debugging much easier than a binary format.
 - `strcasecmp` is used in `findByMajor` so "computer science" and
   "Computer Science" both match, since users won't always match
   capitalization exactly.
+
+
+
+  void displayAllStudents(const Student students[], int count) {
+    if (count == 0) {
+        printf("No students to display.\n");
+        return;
+    }
+
+    printf("\n%-6s %-20s %-15s %-6s %-8s\n",
+           "ID", "Name", "Major", "GPA", "Credits");
+    printf("--------------------------------------------------------\n");
+
+    for (int i = 0; i < count; i++) {
+        printf("%-6d %-20s %-15s %-6.2f %-8d\n",
+               students[i].id,
+               students[i].name,
+               students[i].major,
+               students[i].gpa,
+               students[i].credits);
+    }
+
+    printf("\nTotal Students: %d\n", count);   /* FIX: show count */
+}
