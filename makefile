@@ -1,7 +1,5 @@
-# ============================================================
-# Makefile - automates compiling the Student Registry project
-# ============================================================
 
+# automates compiling the Student Registry project
 CC = gcc
 CFLAGS = -Wall -g
 
