@@ -3,10 +3,7 @@
 #include <string.h>
 #include "student_registry.h"
 
-/* FIX: flushes anything left in stdin up to and including the
-   next newline (or EOF). Call this after any scanf() that reads
-   a number, so leftover bad characters never leak into the next
-   prompt and cause a chain reaction of failed reads. */
+
 void clearInputBuffer(void) {
     int c;
     while ((c = getchar()) != '\n' && c != EOF) { }
@@ -26,7 +23,7 @@ void addStudent(Student students[], int *count) {
         printf("Invalid input. Please enter a whole number: ");
         clearInputBuffer();
     }
-    clearInputBuffer(); /* FIX: eat the leftover newline after %d */
+    clearInputBuffer(); /*eat the leftover newline after %d */
 
     printf("Enter Name: ");
     scanf(" %99[^\n]", s.name);
