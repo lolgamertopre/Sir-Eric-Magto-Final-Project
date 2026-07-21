@@ -1,23 +1,13 @@
-/* ============================================================
-   main.c
-   ------------------------------------------------------------
-   This file is only responsible for the MENU and user
-   interaction. It does not know HOW addStudent or
-   saveStudentsToFile work — it just calls them. That's the
-   benefit of abstraction: this file stays short and readable.
-   ============================================================ */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "student_registry.h"
 
-/* Clears the terminal screen (Linux/Mac). Waits for the user
-   to press Enter first, so they get to actually read the
-   result of their last action before it disappears. */
+
 void pauseAndClear(void) {
     printf("\nPress Enter to continue...");
-    while (getchar() != '\n') { }   /* eat leftover Enter from scanf */
-    getchar();                      /* wait for the real Enter press */
+    while (getchar() != '\n') { }   
+    getchar();                      
     system("clear");
 }
 
@@ -28,7 +18,6 @@ int main(void) {
 
     printf("=== Dr. Santos' Student Registry (with File Storage) ===\n");
 
-    /* Load whatever was saved last time, if anything */
     count = loadStudentsFromFile(students);
 
     do {
