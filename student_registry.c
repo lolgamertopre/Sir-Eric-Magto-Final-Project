@@ -18,12 +18,11 @@ void addStudent(Student students[], int *count) {
     Student s;
 
     printf("Enter Student ID: ");
-    /* FIX: loop until scanf successfully reads an int */
     while (scanf("%d", &s.id) != 1) {
         printf("Invalid input. Please enter a whole number: ");
         clearInputBuffer();
     }
-    clearInputBuffer(); /*eat the leftover newline after %d */
+    clearInputBuffer(); 
 
     printf("Enter Name: ");
     scanf(" %99[^\n]", s.name);
